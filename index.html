@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big's Touch</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="script.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-black min-h-screen text-white font-sans">
+    <akay-navbar></akay-navbar>
+    <akay-sidebar></akay-sidebar>
+    
+    <main class="ml-0 md:ml-64 p-6 pt-20 transition-all duration-300">
+        <div id="aimassist-page" class="page active">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+                <!-- Affichage Panel -->
+                <akay-panel title="Affichage" icon="eye">
+                    <div class="space-y-4">
+                        <akay-toggle label="Afficher le cercle (Overlay)" checked="true"></akay-toggle>
+                        <akay-slider label="Taille du cercle (FOV)" min="0" max="100" value="50"></akay-slider>
+                    </div>
+                </akay-panel>
+
+                <!-- Performance Panel -->
+                <akay-panel title="Performance" icon="zap">
+                    <div class="space-y-4">
+                        <akay-slider label="Lissage (Smooth)" min="0" max="10" value="3"></akay-slider>
+                        <akay-mode-selector modes='["Rapide", "Équilibré", "Précis"]' active="Équilibré"></akay-mode-selector>
+                    </div>
+                </akay-panel>
+
+                <!-- Détection Panel -->
+                <akay-panel title="Détection" icon="search">
+                    <div class="space-y-4">
+                        <akay-slider label="Luminosité Min (Murs)" min="0" max="255" value="110"></akay-slider>
+                        <akay-slider label="Pureté Rouge" min="0" max="100" value="40"></akay-slider>
+                    </div>
+                </akay-panel>
+
+                <!-- État Panel -->
+                <akay-panel title="État" icon="activity">
+                    <div class="space-y-3">
+                        <akay-status label="Suivi" status="active"></akay-status>
+                        <akay-status label="Mode Marron" status="inactive"></akay-status>
+                        <akay-status label="Cible" status="inactive"></akay-status>
+                    </div>
+                </akay-panel>
+
+                <!-- Raccourcis Panel -->
+                <akay-panel title="Raccourcis" icon="command" class="lg:col-span-2">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <akay-shortcut key="F2" action="Menu"></akay-shortcut>
+                        <akay-shortcut key="$" action="ON/OFF"></akay-shortcut>
+                        <akay-shortcut key="ù" action="Marron"></akay-shortcut>
+                        <akay-shortcut key="Clic Droit" action="Activer"></akay-shortcut>
+                    </div>
+                </akay-panel>
+            </div>
+        </div>
+
+        <div id="parametres-page" class="page hidden">
+            <div class="max-w-4xl mx-auto">
+                <akay-panel title="Paramètres Généraux" icon="settings" class="max-w-2xl">
+                    <div class="space-y-6">
+                        <akay-toggle label="Auto-Launch au démarrage" checked="true"></akay-toggle>
+                        
+                        <div class="space-y-2">
+                            <label class="text-sm text-gray-300">Langue</label>
+                            <select class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                <option>Français</option>
+                                <option>English</option>
+                                <option>Español</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-sm text-gray-300">Thème</label>
+                            <div class="flex space-x-4">
+                                <button class="theme-btn active bg-gray-800 border border-cyan-500 text-cyan-400 px-4 py-2 rounded-lg transition-all">Dark</button>
+                                <button class="theme-btn bg-gray-800 border border-gray-600 text-gray-400 px-4 py-2 rounded-lg transition-all hover:border-gray-500">Light</button>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-3 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300">
+                            Sauvegarder la Configuration
+                        </button>
+                    </div>
+                </akay-panel>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load Components -->
+    <script src="components/navbar.js"></script>
+    <script src="components/sidebar.js"></script>
+    <script src="components/panel.js"></script>
+    <script src="components/toggle.js"></script>
+    <script src="components/slider.js"></script>
+    <script src="components/mode-selector.js"></script>
+    <script src="components/status.js"></script>
+    <script src="components/shortcut.js"></script>
+    
+    <script>
+        feather.replace();
+        
+        // Page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = document.querySelectorAll('.page');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show target page
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                        page.classList.add('hidden');
+                    });
+                    
+                    const targetPage = document.getElementById(target);
+                    if (targetPage) {
+                        targetPage.classList.remove('hidden');
+                        targetPage.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
